@@ -3,7 +3,7 @@
 import React, { FC } from "react";
 
 interface IMenuItem {
-  onClick?: () => void; // todo: сделать обязательным!
+  onClick: () => void;
   label: string;
 }
 

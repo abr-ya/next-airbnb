@@ -1,7 +1,7 @@
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
-import Modal from "./components/Modals/Modal";
+import RegisterModal from "./components/Modals/RegisterModal";
 
 const font = Nunito({
   subsets: ["latin"],
@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={font.className}>
         <Navbar />
-        <Modal isOpen title="Hello, Modal!" actionLabel="Click Me!))" />
+        <RegisterModal />
         {children}
       </body>
     </html>
