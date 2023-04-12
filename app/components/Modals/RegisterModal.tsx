@@ -11,6 +11,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 
 import Modal from "./Modal";
+import Heading from "../Heading";
 // import Input from "../inputs/Input";
 // import Heading from "../Heading";
 // import Button from "../Button";
@@ -38,9 +39,19 @@ const RegisterModal = () => {
     console.log("post data", data);
   };
 
-  const bodyContent = <div className="flex flex-col gap-4">Register Modal Body</div>;
+  const bodyContent = (
+    <div className="flex flex-col gap-4">
+      <Heading title="Welcome to Airbnb" subtitle="Create an account!" />
+      <div>Register Form Inputs</div>
+    </div>
+  );
 
-  const footerContent = <>Register Modal Footer</>;
+  const footerContent = (
+    <div className="flex flex-col gap-4 mt-3">
+      <hr />
+      <div>Register Form Buttons</div>
+    </div>
+  );
 
   return (
     <Modal
