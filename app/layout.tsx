@@ -2,6 +2,8 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
 import RegisterModal from "./components/Modals/RegisterModal";
+import ToasterProvider from "./providers/ToasterProvider";
+import "react-toastify/dist/ReactToastify.css";
 
 const font = Nunito({
   subsets: ["latin"],
@@ -12,10 +14,6 @@ export const metadata = {
   description: "Next 13 + Tailwind Airbnb App Description",
 };
 
-const tempHandler = () => {
-  console.log("click!");
-};
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -23,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <RegisterModal />
         {children}
+        <ToasterProvider />
       </body>
     </html>
   );
