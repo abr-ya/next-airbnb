@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-
-// import prisma from "@/app/libs/prismadb";
+import prisma from "@/app/libs/prismadb";
 
 export async function POST(request: Request) {
   const { email, name, password } = await request.json();
@@ -16,7 +15,7 @@ export async function POST(request: Request) {
     },
   };
   console.log("create user:", newUser);
-  // const user = await prisma.user.create(newUser);
+  const user = await prisma.user.create(newUser);
 
-  return NextResponse.json(newUser); // todo: user
+  return NextResponse.json(user);
 }

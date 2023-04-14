@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar/Navbar";
 import RegisterModal from "./components/Modals/RegisterModal";
 import ToasterProvider from "./providers/ToasterProvider";
 import "react-toastify/dist/ReactToastify.css";
+import LoginModal from "./components/Modals/LoginModal";
 
 const font = Nunito({
   subsets: ["latin"],
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={font.className}>
         <Navbar />
+        <LoginModal />
         <RegisterModal />
         {children}
         <ToasterProvider />
