@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import { SafeUser } from "@/app/types";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
-const UserMenu = () => {
+interface IUserMenu {
+  currentUser?: SafeUser | null;
+}
+
+const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -20,6 +29,23 @@ const UserMenu = () => {
   const onRent = () => {
     console.log("onRentHandler");
   };
+
+  const renderGuestMenu = () => (
+    <>
+      <MenuItem onClick={loginModal.onOpen} label="Login" />
+      <MenuItem onClick={registerModal.onOpen} label="Sign Up" />
+    </>
+  );
+
+  const renderUserMenu = () => (
+    <>
+      <MenuItem label="My trips" onClick={() => router.push("/trips")} />
+      <MenuItem label="My favorites" onClick={() => router.push("/favorites")} />
+      <MenuItem label="My reservations" onClick={() => router.push("/reservations")} />
+      <hr />
+      <MenuItem label="Logout" onClick={() => signOut()} />
+    </>
+  );
 
   return (
     <div className="relative">
@@ -44,13 +70,7 @@ const UserMenu = () => {
       </div>
       {isOpen && (
         <div className="absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
-          <div className="flex flex-col cursor-pointer">
-            <>
-              {/* todo: поменять! */}
-              <MenuItem onClick={loginModal.onOpen} label="Login" />
-              <MenuItem onClick={registerModal.onOpen} label="Sign Up" />
-            </>
-          </div>
+          <div className="flex flex-col cursor-pointer">{currentUser ? renderUserMenu() : renderGuestMenu()}</div>
         </div>
       )}
     </div>
