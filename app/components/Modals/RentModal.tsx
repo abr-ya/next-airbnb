@@ -2,12 +2,13 @@
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
+import { toast } from "react-toastify";
 
 import useRentModal from "@/app/hooks/useRentModal";
 
 import Modal from "./Modal";
 import Heading from "../Heading";
-import { toast } from "react-toastify";
 import categories from "@/app/data/categories";
 import CategorySelect from "../Inputs/CategorySelect";
 import CountrySelect from "../Inputs/CountrySelect";
@@ -64,7 +65,14 @@ const RentModal = () => {
     });
   };
 
-  // todo: Create Map
+  const DynamicMap = useMemo(
+    () =>
+      dynamic(() => import("../MapLeaflet"), {
+        ssr: false,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location],
+  );
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (step !== STEPS.PRICE) {
@@ -129,7 +137,7 @@ const RentModal = () => {
         <div className="flex flex-col gap-8">
           <Heading title="Where is your place located?" subtitle={`step ${step + 1}: Help guests find you!`} />
           <CountrySelect value={location} onChange={(value) => setCustomValue("location", value)} />
-          {/* Map!!! */}
+          <DynamicMap center={location?.latlng} />
         </div>
       );
       break;
