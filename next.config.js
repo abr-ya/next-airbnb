@@ -3,6 +3,9 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  images: {
+    domains: ["images.unsplash.com", "cdn.sanity.io", "i.pinimg.com"],
+  },
 };
 
 module.exports = nextConfig;
