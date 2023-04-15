@@ -29,7 +29,6 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
   const rentModal = useRentModal();
 
   const onRent = () => {
-    console.log("onRentHandler");
     const modal = currentUser ? rentModal : loginModal;
     modal.onOpen();
   };

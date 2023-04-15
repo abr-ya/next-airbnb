@@ -8,6 +8,8 @@ import useRentModal from "@/app/hooks/useRentModal";
 import Modal from "./Modal";
 import Heading from "../Heading";
 import { toast } from "react-toastify";
+import categories from "@/app/data/categories";
+import CategorySelect from "../Inputs/CategorySelect";
 
 enum STEPS {
   CATEGORY = 0,
@@ -46,9 +48,19 @@ const RentModal = () => {
     description: "",
   };
 
-  const { handleSubmit, reset } = useForm<FieldValues>({ defaultValues });
+  const { handleSubmit, reset, watch, setValue } = useForm<FieldValues>({ defaultValues });
 
   // todo: watchers
+  const category = watch("category");
+
+  const setCustomValue = (id: string, value: any) => {
+    console.log("setValue", id, value);
+    setValue(id, value, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
 
   // todo: Create Map
 
@@ -90,7 +102,19 @@ const RentModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading title="Which of these best describes your place?" subtitle={`step ${step}: Pick a category`} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto">todo: Category Select!</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto">
+        {categories.map((item) => (
+          <div key={item.label} className="col-span-1">
+            <CategorySelect
+              onClick={(cat: string) => {
+                setCustomValue("category", cat);
+              }}
+              selected={category === item.label}
+              label={item.label}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 
