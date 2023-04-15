@@ -8,6 +8,7 @@ import getCurrentUser from "./actions/getCurrentUser";
 import RegisterModal from "./components/Modals/RegisterModal";
 import LoginModal from "./components/Modals/LoginModal";
 import RentModal from "./components/Modals/RentModal";
+import ClientOnly from "./components/ClientOnly";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -22,12 +23,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className={font.className}>
-        <Navbar currentUser={currentUser} />
-        <LoginModal />
-        <RegisterModal />
-        <RentModal />
-        {children}
-        <ToasterProvider />
+        <ClientOnly>
+          <ToasterProvider />
+          <Navbar currentUser={currentUser} />
+          <LoginModal />
+          <RegisterModal />
+          <RentModal />
+        </ClientOnly>
+        <div className="pb-20 pt-28">{children}</div>
       </body>
     </html>
   );
