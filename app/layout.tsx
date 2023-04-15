@@ -1,15 +1,15 @@
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar/Navbar";
-import RegisterModal from "./components/Modals/RegisterModal";
 import ToasterProvider from "./providers/ToasterProvider";
 import "react-toastify/dist/ReactToastify.css";
-import LoginModal from "./components/Modals/LoginModal";
-import getCurrentUser from "./actions/getCurrentUser";
 
-const font = Nunito({
-  subsets: ["latin"],
-});
+import Navbar from "./components/Navbar/Navbar";
+import getCurrentUser from "./actions/getCurrentUser";
+import RegisterModal from "./components/Modals/RegisterModal";
+import LoginModal from "./components/Modals/LoginModal";
+import RentModal from "./components/Modals/RentModal";
+
+const font = Nunito({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Next Airbnb App",
@@ -25,6 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Navbar currentUser={currentUser} />
         <LoginModal />
         <RegisterModal />
+        <RentModal />
         {children}
         <ToasterProvider />
       </body>
