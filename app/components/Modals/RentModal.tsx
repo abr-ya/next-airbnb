@@ -12,6 +12,7 @@ import Heading from "../Heading";
 import categories from "@/app/data/categories";
 import CategorySelect from "../Inputs/CategorySelect";
 import CountrySelect from "../Inputs/CountrySelect";
+import Input from "../Inputs/Input";
 
 enum STEPS {
   CATEGORY = 0,
@@ -50,7 +51,14 @@ const RentModal = () => {
     description: "",
   };
 
-  const { handleSubmit, reset, watch, setValue } = useForm<FieldValues>({ defaultValues });
+  const {
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    register,
+    formState: { errors },
+  } = useForm<FieldValues>({ defaultValues });
 
   // todo: watchers
   const category = watch("category");
@@ -138,6 +146,42 @@ const RentModal = () => {
           <Heading title="Where is your place located?" subtitle={`step ${step + 1}: Help guests find you!`} />
           <CountrySelect value={location} onChange={(value) => setCustomValue("location", value)} />
           <DynamicMap center={location?.latlng} />
+        </div>
+      );
+      break;
+    case STEPS.DESCRIPTION:
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading
+            title="How would you describe your place?"
+            subtitle={`step ${step + 1}: Short and sweet works best!`}
+          />
+          <Input id="title" label="Title" disabled={isLoading} register={register} errors={errors} required />
+          <Input
+            id="description"
+            label="Description"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+          />
+        </div>
+      );
+      break;
+    case STEPS.PRICE:
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading title="Now, set your price" subtitle={`step ${step + 1}: How much do you charge per night?`} />
+          <Input
+            id="price"
+            label="Price"
+            formatPrice
+            type="number"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+          />
         </div>
       );
       break;
