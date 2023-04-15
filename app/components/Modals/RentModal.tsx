@@ -3,6 +3,8 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 import useRentModal from "@/app/hooks/useRentModal";
@@ -24,18 +26,17 @@ enum STEPS {
 }
 
 const RentModal = () => {
+  const router = useRouter();
   const rentModal = useRentModal();
 
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
 
   const onBack = () => {
-    console.log("back");
     setStep((value) => value - 1);
   };
 
   const onNext = () => {
-    console.log("next");
     setStep((value) => value + 1);
   };
 
@@ -91,14 +92,21 @@ const RentModal = () => {
 
     // todo: axios post data
     setIsLoading(true);
-    toast.success("Отправить данные!", {
-      onClose: () => {
-        setIsLoading(false);
+    axios
+      .post("/api/listings", data)
+      .then(() => {
+        toast.success("Listing created!");
+        router.refresh();
         reset();
         setStep(STEPS.CATEGORY);
-      },
-      autoClose: 5000,
-    });
+        rentModal.onClose();
+      })
+      .catch(() => {
+        toast.error("Something went wrong.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const actionLabel = useMemo(() => {
