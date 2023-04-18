@@ -5,7 +5,6 @@ import getListingById from "@/app/actions/getListingById";
 import getReservations from "@/app/actions/getReservations";
 import ListingClient from "@/app/components/listings/ListingClient";
 import { Metadata } from "next";
-import { ResolvingMetadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 interface IParams {
   listingId?: string;
@@ -16,7 +15,7 @@ export const generateMetadata = async ({ params }: { params: IParams }): Promise
 
   return {
     title: `${listing?.title} | Next Airbnb App`,
-    description: `Nice place hosted by ${listing?.user}`,
+    description: `Nice place hosted by ${listing?.user?.name}`,
   };
 };
 
