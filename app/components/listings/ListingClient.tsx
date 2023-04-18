@@ -2,15 +2,18 @@
 
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { Range } from "react-date-range";
 import { differenceInDays, eachDayOfInterval } from "date-fns";
-import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+
+import useLoginModal from "@/app/hooks/useLoginModal";
 import categories from "@/app/data/categories";
+import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import { initialDateRange } from "@/app/constants";
 import Container from "../Container";
 import ListingHead from "./ListingHead";
 import ListingInfo from "./ListingInfo";
-import { initialDateRange } from "@/app/constants";
-import useLoginModal from "@/app/hooks/useLoginModal";
 import ListingReservation from "./ListingReservation";
 
 interface IListingClient {
@@ -25,10 +28,14 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
   const loginModal = useLoginModal();
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(listing.price);
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
-    reservations.forEach((reservation: any) => {
+    reservations.forEach((reservation) => {
       const range = eachDayOfInterval({
         start: new Date(reservation.startDate),
         end: new Date(reservation.endDate),
@@ -44,10 +51,6 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
     return categories.find((items) => items.label === listing.category);
   }, [listing.category]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
-
   const onCreateReservation = useCallback(() => {
     if (!currentUser) return loginModal.onOpen();
     setIsLoading(true);
@@ -60,7 +63,25 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
     };
     console.log("post", createData);
     // post create
-  }, [totalPrice, dateRange, listing?.id, currentUser, loginModal]);
+    axios
+      .post("/api/reservations", {
+        totalPrice,
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        listingId: listing?.id,
+      })
+      .then(() => {
+        toast.success("Listing reserved!");
+        setDateRange(initialDateRange);
+        router.push("/trips");
+      })
+      .catch(() => {
+        toast.error("Something went wrong.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [currentUser, loginModal, totalPrice, dateRange.startDate, dateRange.endDate, listing?.id, router]);
 
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {
