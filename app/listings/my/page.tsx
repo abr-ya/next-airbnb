@@ -24,7 +24,7 @@ const MyListingsPage = async () => {
 
   return (
     <ClientOnly>
-      <MyListingsClient listings={listings} currentUser={currentUser} />
+      <MyListingsClient listings={listings} user={currentUser} />
     </ClientOnly>
   );
 };
