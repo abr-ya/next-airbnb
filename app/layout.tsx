@@ -1,14 +1,14 @@
+import { PropsWithChildren } from "react";
 import { Nunito } from "next/font/google";
-import "./globals.css";
 import ToasterProvider from "./providers/ToasterProvider";
 import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
+
+import getCurrentUser from "./actions/getCurrentUser";
 
 import Navbar from "./components/Navbar/Navbar";
-import getCurrentUser from "./actions/getCurrentUser";
-import RegisterModal from "./components/Modals/RegisterModal";
-import LoginModal from "./components/Modals/LoginModal";
-import RentModal from "./components/Modals/RentModal";
 import ClientOnly from "./components/ClientOnly";
+import Modals from "./components/Modals/Modals";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -17,7 +17,7 @@ export const metadata = {
   description: "Next 13 + Tailwind Airbnb App Description",
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+const RootLayout = async ({ children }: PropsWithChildren) => {
   const currentUser = await getCurrentUser();
 
   return (
@@ -25,13 +25,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider />
+          <Modals />
           <Navbar currentUser={currentUser} />
-          <LoginModal />
-          <RegisterModal />
-          <RentModal />
         </ClientOnly>
         <div className="pb-20 pt-28">{children}</div>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

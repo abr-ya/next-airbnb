@@ -42,6 +42,8 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
 
   const renderUserMenu = () => (
     <>
+      <MenuItem label="Home Page" onClick={() => router.push("/")} />
+      <hr />
       <MenuItem label="My trips" onClick={() => router.push("/trips")} />
       <MenuItem label="My favorites" onClick={() => router.push("/favorites")} />
       <MenuItem label="My reservations" onClick={() => router.push("/reservations")} />
