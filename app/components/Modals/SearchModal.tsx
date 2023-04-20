@@ -2,18 +2,18 @@
 
 import { useCallback, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import qs from "query-string";
+import qs, { UrlObject } from "query-string";
 import { Range } from "react-date-range";
 
 import useSearchModal from "@/app/hooks/useSearchModal";
 import Modal from "./Modal";
 import Heading from "../Heading";
 import CountrySelect, { CountrySelectValue } from "../Inputs/CountrySelect";
+import Number from "../Inputs/Number";
 import { initialDateRange } from "@/app/constants";
 import DatePicker from "../Inputs/DatePicker";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatISO } from "date-fns";
-import { SearchParams } from "@/app/types";
 
 enum STEPS {
   LOCATION = 0,
@@ -24,6 +24,7 @@ enum STEPS {
 const SearchModal = () => {
   const searchModal = useSearchModal();
   const params = useSearchParams();
+  const router = useRouter();
 
   const [step, setStep] = useState(STEPS.LOCATION);
   const [location, setLocation] = useState<CountrySelectValue>();
@@ -54,7 +55,7 @@ const SearchModal = () => {
 
     const currentQuery = params ? qs.parse(params.toString()) : {};
 
-    const updatedQuery: SearchParams = {
+    const updatedQuery: { [key: string]: string | number } = {
       ...currentQuery,
       guestCount,
       roomCount,
@@ -68,7 +69,12 @@ const SearchModal = () => {
     setStep(STEPS.LOCATION);
     searchModal.onClose();
 
-    console.log("create rout + go to", updatedQuery);
+    console.log("search listings", updatedQuery);
+
+    const obj: UrlObject = { url: "/", query: updatedQuery };
+    const url = qs.stringifyUrl(obj, { skipNull: true });
+
+    router.push(url);
   };
 
   const actionLabel = useMemo(() => {
@@ -101,7 +107,33 @@ const SearchModal = () => {
       );
       break;
     case STEPS.INFO:
-      bodyContent = <>3</>;
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading title="More information" subtitle="Find your perfect place!" />
+          <Number
+            onChange={(value) => setGuestCount(value)}
+            value={guestCount}
+            title="Guests"
+            subtitle="How many guests are coming?"
+          />
+          <hr />
+          <Number
+            onChange={(value) => setRoomCount(value)}
+            value={roomCount}
+            title="Rooms"
+            subtitle="How many rooms do you need?"
+          />
+          <hr />
+          <Number
+            onChange={(value) => {
+              setBathroomCount(value);
+            }}
+            value={bathroomCount}
+            title="Bathrooms"
+            subtitle="How many bahtrooms do you need?"
+          />
+        </div>
+      );
       break;
     default:
       break;
