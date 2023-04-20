@@ -1,11 +1,19 @@
 "use client";
 
-import useSearchModal from "@/app/hooks/useSearchModal";
-import Modal from "./Modal";
 import { useCallback, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import qs from "query-string";
+import { Range } from "react-date-range";
+
+import useSearchModal from "@/app/hooks/useSearchModal";
+import Modal from "./Modal";
 import Heading from "../Heading";
 import CountrySelect, { CountrySelectValue } from "../Inputs/CountrySelect";
+import { initialDateRange } from "@/app/constants";
+import DatePicker from "../Inputs/DatePicker";
+import { useSearchParams } from "next/navigation";
+import { formatISO } from "date-fns";
+import { SearchParams } from "@/app/types";
 
 enum STEPS {
   LOCATION = 0,
@@ -15,9 +23,14 @@ enum STEPS {
 
 const SearchModal = () => {
   const searchModal = useSearchModal();
+  const params = useSearchParams();
 
   const [step, setStep] = useState(STEPS.LOCATION);
   const [location, setLocation] = useState<CountrySelectValue>();
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+  const [guestCount, setGuestCount] = useState(1);
+  const [roomCount, setRoomCount] = useState(1);
+  const [bathroomCount, setBathroomCount] = useState(1);
 
   const Map = useMemo(
     () =>
@@ -39,10 +52,23 @@ const SearchModal = () => {
   const searchHandler = () => {
     if (step !== STEPS.INFO) return onNext();
 
-    const params = {
-      location,
+    const currentQuery = params ? qs.parse(params.toString()) : {};
+
+    const updatedQuery: SearchParams = {
+      ...currentQuery,
+      guestCount,
+      roomCount,
+      bathroomCount,
     };
-    console.log("search", params);
+
+    if (location) updatedQuery.locationValue = location.value;
+    if (dateRange.startDate) updatedQuery.startDate = formatISO(dateRange.startDate);
+    if (dateRange.endDate) updatedQuery.endDate = formatISO(dateRange.endDate);
+
+    setStep(STEPS.LOCATION);
+    searchModal.onClose();
+
+    console.log("create rout + go to", updatedQuery);
   };
 
   const actionLabel = useMemo(() => {
@@ -53,7 +79,33 @@ const SearchModal = () => {
     return step === STEPS.LOCATION ? undefined : "Back";
   }, [step]);
 
-  const bodyContent = <div className="flex flex-col gap-8">Search modal step: {step + 1}</div>;
+  let bodyContent;
+
+  switch (step) {
+    case STEPS.LOCATION:
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading title="Where do you wanna go?" subtitle="Find the perfect location!" />
+          <CountrySelect value={location} onChange={(value) => setLocation(value)} />
+          <hr />
+          <Map center={location?.latlng} />
+        </div>
+      );
+      break;
+    case STEPS.DATE:
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading title="When do you plan to go?" subtitle="Make sure everyone is free!" />
+          <DatePicker onChange={(value) => setDateRange(value.selection)} value={dateRange} />
+        </div>
+      );
+      break;
+    case STEPS.INFO:
+      bodyContent = <>3</>;
+      break;
+    default:
+      break;
+  }
 
   return (
     <Modal

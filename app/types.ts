@@ -16,3 +16,12 @@ export type SafeUser = Omit<User, "createdAt" | "updatedAt" | "emailVerified"> &
   updatedAt: string;
   emailVerified: string | null;
 };
+
+export interface SearchParams {
+  locationValue?: string;
+  guestCount: number;
+  roomCount: number;
+  bathroomCount: number;
+  startDate?: string;
+  endDate?: string;
+}
