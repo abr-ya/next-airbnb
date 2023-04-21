@@ -7,27 +7,25 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import useRentModal from "@/app/hooks/useRentModal";
+import useCreateModal from "@/app/hooks/useCreateModal";
 
 import Modal from "./Modal";
 import Heading from "../Heading";
 import categories from "@/app/data/categories";
-import CategorySelect from "../Inputs/CategorySelect";
-import CountrySelect from "../Inputs/CountrySelect";
-import Input from "../Inputs/Input";
+import { CategorySelect, CountrySelect, Input, NumberInput } from "../Inputs";
 
 enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
   INFO = 2,
-  IMAGES = 3,
+  IMAGE = 3,
   DESCRIPTION = 4,
   PRICE = 5,
 }
 
-const RentModal = () => {
+const CreateModal = () => {
   const router = useRouter();
-  const rentModal = useRentModal();
+  const rentModal = useCreateModal();
 
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
@@ -64,6 +62,10 @@ const RentModal = () => {
   // todo: watchers
   const category = watch("category");
   const location = watch("location");
+  const guestCount = watch("guestCount");
+  const roomCount = watch("roomCount");
+  const bathroomCount = watch("bathroomCount");
+  // const imageSrc = watch("imageSrc");
 
   const setCustomValue = (id: string, value: any) => {
     console.log("setValue", id, value);
@@ -72,6 +74,23 @@ const RentModal = () => {
       shouldTouch: true,
       shouldValidate: true,
     });
+  };
+
+  const setGuestCount = (value: number) => setCustomValue("guestCount", value);
+  const setRoomCount = (value: number) => setCustomValue("roomCount", value);
+  const setBathroomCount = (value: number) => setCustomValue("bathroomCount", value);
+
+  const TEXT = {
+    [STEPS.INFO]: {
+      TITLE: "Share some basics about your place",
+      SUBTITLE: "What amenitis do you have?",
+      GUEST_TITLE: "Guests",
+      GUEST_SUBTITLE: "How many guests do you allow?",
+      ROOM_TITLE: "Rooms",
+      ROOM_SUBTITLE: "How many rooms do you have?",
+      BATHROOM_TITLE: "Rooms",
+      BATHROOM_SUBTITLE: "How many rooms do you have?",
+    },
   };
 
   const DynamicMap = useMemo(
@@ -157,6 +176,33 @@ const RentModal = () => {
         </div>
       );
       break;
+    case STEPS.INFO:
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading title={TEXT[STEPS.INFO].TITLE} subtitle={TEXT[STEPS.INFO].SUBTITLE} />
+          <NumberInput
+            onChange={setGuestCount}
+            value={guestCount}
+            title={TEXT[STEPS.INFO].GUEST_TITLE}
+            subtitle={TEXT[STEPS.INFO].GUEST_SUBTITLE}
+          />
+          <hr />
+          <NumberInput
+            onChange={setRoomCount}
+            value={roomCount}
+            title={TEXT[STEPS.INFO].ROOM_SUBTITLE}
+            subtitle={TEXT[STEPS.INFO].ROOM_SUBTITLE}
+          />
+          <hr />
+          <NumberInput
+            onChange={setBathroomCount}
+            value={bathroomCount}
+            title={TEXT[STEPS.INFO].BATHROOM_SUBTITLE}
+            subtitle={TEXT[STEPS.INFO].BATHROOM_SUBTITLE}
+          />
+        </div>
+      );
+      break;
     case STEPS.DESCRIPTION:
       bodyContent = (
         <div className="flex flex-col gap-8">
@@ -212,4 +258,4 @@ const RentModal = () => {
   );
 };
 
-export default RentModal;
+export default CreateModal;

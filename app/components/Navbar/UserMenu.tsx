@@ -9,7 +9,7 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import useRentModal from "@/app/hooks/useRentModal";
+import useCreateModal from "@/app/hooks/useCreateModal";
 
 interface IUserMenu {
   currentUser?: SafeUser | null;
@@ -26,7 +26,7 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
 
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-  const rentModal = useRentModal();
+  const rentModal = useCreateModal();
 
   const onRent = () => {
     const modal = currentUser ? rentModal : loginModal;

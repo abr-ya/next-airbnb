@@ -1,6 +1,6 @@
 import RegisterModal from "./RegisterModal";
 import LoginModal from "./LoginModal";
-import RentModal from "./RentModal";
+import CreateModal from "./CreateModal";
 import SearchModal from "./SearchModal";
 
 const Modals = () => {
@@ -8,7 +8,7 @@ const Modals = () => {
     <>
       <LoginModal />
       <RegisterModal />
-      <RentModal />
+      <CreateModal />
       <SearchModal />
     </>
   );
