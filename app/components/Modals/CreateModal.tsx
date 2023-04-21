@@ -8,11 +8,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import useCreateModal from "@/app/hooks/useCreateModal";
-
+import categories from "@/app/data/categories";
 import Modal from "./Modal";
 import Heading from "../Heading";
-import categories from "@/app/data/categories";
-import { CategorySelect, CountrySelect, Input, NumberInput } from "../Inputs";
+import { CategorySelect, CountrySelect, ImageUpload, Input, NumberInput } from "../Inputs";
 
 enum STEPS {
   CATEGORY = 0,
@@ -44,7 +43,7 @@ const CreateModal = () => {
     guestCount: 1,
     roomCount: 1,
     bathroomCount: 1,
-    imageSrc: "https://i.pinimg.com/564x/c8/af/87/c8af87f0f9cc54bffdc8e86925a555f0.jpg",
+    imageSrc: "",
     price: 1,
     title: "",
     description: "",
@@ -59,13 +58,12 @@ const CreateModal = () => {
     formState: { errors },
   } = useForm<FieldValues>({ defaultValues });
 
-  // todo: watchers
   const category = watch("category");
   const location = watch("location");
   const guestCount = watch("guestCount");
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
-  // const imageSrc = watch("imageSrc");
+  const imageSrc = watch("imageSrc");
 
   const setCustomValue = (id: string, value: any) => {
     console.log("setValue", id, value);
@@ -89,7 +87,7 @@ const CreateModal = () => {
       ROOM_TITLE: "Rooms",
       ROOM_SUBTITLE: "How many rooms do you have?",
       BATHROOM_TITLE: "Rooms",
-      BATHROOM_SUBTITLE: "How many rooms do you have?",
+      BATHROOM_SUBTITLE: "How many bathrooms do you have?",
     },
   };
 
@@ -144,7 +142,7 @@ const CreateModal = () => {
     return "Back";
   }, [step]);
 
-  let bodyContent = <>step {step + 1} is coming soon!</>;
+  let bodyContent;
 
   switch (step) {
     case STEPS.CATEGORY:
@@ -200,6 +198,14 @@ const CreateModal = () => {
             title={TEXT[STEPS.INFO].BATHROOM_SUBTITLE}
             subtitle={TEXT[STEPS.INFO].BATHROOM_SUBTITLE}
           />
+        </div>
+      );
+      break;
+    case STEPS.IMAGE:
+      bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading title="Add a photo of your place" subtitle="Show guests what your place looks like!" />
+          <ImageUpload onChange={(value) => setCustomValue("imageSrc", value)} value={imageSrc} />
         </div>
       );
       break;
