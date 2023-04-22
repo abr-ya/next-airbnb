@@ -24,7 +24,7 @@ enum STEPS {
 
 const CreateModal = () => {
   const router = useRouter();
-  const rentModal = useCreateModal();
+  const createModal = useCreateModal();
 
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
@@ -116,7 +116,7 @@ const CreateModal = () => {
         router.refresh();
         reset();
         setStep(STEPS.CATEGORY);
-        rentModal.onClose();
+        createModal.onClose();
       })
       .catch(() => {
         toast.error("Something went wrong.");
@@ -252,13 +252,13 @@ const CreateModal = () => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={rentModal.isOpen}
+      isOpen={createModal.isOpen}
       title="Airbnb your home!"
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      onClose={rentModal.onClose}
+      onClose={createModal.onClose}
       body={bodyContent}
     />
   );

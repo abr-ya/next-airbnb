@@ -26,10 +26,10 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
 
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-  const rentModal = useCreateModal();
+  const createModal = useCreateModal();
 
-  const onRent = () => {
-    const modal = currentUser ? rentModal : loginModal;
+  const onCreate = () => {
+    const modal = currentUser ? createModal : loginModal;
     modal.onOpen();
   };
 
@@ -48,7 +48,7 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
       <MenuItem label="My favorites" onClick={() => router.push("/favorites")} />
       <MenuItem label="My reservations" onClick={() => router.push("/reservations")} />
       <MenuItem label="My listings" onClick={() => router.push("/listings/my")} />
-      <MenuItem label="Airbnb your home" onClick={rentModal.onOpen} />
+      <MenuItem label="Airbnb your home" onClick={createModal.onOpen} />
       <hr />
       <MenuItem label="Logout" onClick={() => signOut()} />
     </>
@@ -58,7 +58,7 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div
-          onClick={onRent}
+          onClick={onCreate}
           className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
         >
           Airbnb your home
@@ -77,7 +77,9 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
       </div>
       {isOpen && (
         <div className="absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
-          <div className="flex flex-col cursor-pointer">{currentUser ? renderUserMenu() : renderGuestMenu()}</div>
+          <div className="flex flex-col cursor-pointer" onClick={toggleOpen}>
+            {currentUser ? renderUserMenu() : renderGuestMenu()}
+          </div>
         </div>
       )}
     </div>
