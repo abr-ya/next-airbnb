@@ -26,8 +26,18 @@ const TripsClient: FC<ITripsClient> = ({ reservations, currentUser }) => {
       setDeletingId(id);
 
       // axios delete
-      toast.error(`Reservation cancelled ${id} ==> coming sooon!`);
-      router.refresh();
+      axios
+        .delete(`/api/reservations/${id}`)
+        .then(() => {
+          toast.success("Reservation cancelled");
+          router.refresh();
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error);
+        })
+        .finally(() => {
+          setDeletingId("");
+        });
     },
     [router],
   );
