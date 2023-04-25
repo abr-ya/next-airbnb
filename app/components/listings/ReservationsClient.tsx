@@ -12,12 +12,14 @@ import { gridClasses } from "@/app/constants";
 
 import ListingCard from "./ListingCard";
 
-interface ITripsClient {
+interface IReservationsClient {
+  title: string;
+  subtitle: string;
   reservations: SafeReservation[];
   currentUser?: SafeUser | null;
 }
 
-const TripsClient: FC<ITripsClient> = ({ reservations, currentUser }) => {
+const ReservationsClient: FC<IReservationsClient> = ({ title, subtitle, reservations, currentUser }) => {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState("");
 
@@ -44,7 +46,7 @@ const TripsClient: FC<ITripsClient> = ({ reservations, currentUser }) => {
 
   return (
     <Container>
-      <Heading title="My Trips" subtitle="Where you've been and where you're going" />
+      <Heading title={title} subtitle={subtitle} />
       <div className={`${gridClasses} mt-10`}>
         {reservations.map((reservation) => (
           <ListingCard
@@ -63,4 +65,4 @@ const TripsClient: FC<ITripsClient> = ({ reservations, currentUser }) => {
   );
 };
 
-export default TripsClient;
+export default ReservationsClient;

@@ -2,7 +2,7 @@ import getCurrentUser from "../actions/getCurrentUser";
 import getReservations from "../actions/getReservations";
 import ClientOnly from "../components/ClientOnly";
 import EmptyState from "../components/EmptyState";
-import MyTripsClient from "../components/listings/MyTripsClient";
+import ReservationsClient from "../components/listings/ReservationsClient";
 
 const TripsPage = async () => {
   const currentUser = await getCurrentUser();
@@ -27,7 +27,12 @@ const TripsPage = async () => {
 
   return (
     <ClientOnly>
-      <MyTripsClient reservations={reservations} currentUser={currentUser} />
+      <ReservationsClient
+        title="My Trips"
+        subtitle="Where you've been and where you're going"
+        reservations={reservations}
+        currentUser={currentUser}
+      />
     </ClientOnly>
   );
 };
