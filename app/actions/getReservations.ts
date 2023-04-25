@@ -1,4 +1,6 @@
 import prisma from "@/app/libs/prismadb";
+import { SafeReservation } from "../types";
+import { Listing, Reservation } from "@prisma/client";
 
 interface IParams {
   listingId?: string;
@@ -16,7 +18,7 @@ export default async function getReservations(params: IParams) {
     if (userId) query.userId = userId;
     if (authorId) query.listing = { userId: authorId };
 
-    const reservations = await prisma.reservation.findMany({
+    const reservations: (Reservation & { listing: Listing })[] = await prisma.reservation.findMany({
       where: query,
       include: {
         listing: true,
@@ -26,7 +28,7 @@ export default async function getReservations(params: IParams) {
       },
     });
 
-    const safeReservations = reservations.map((reservation) => ({
+    const safeReservations: SafeReservation[] = reservations.map((reservation) => ({
       ...reservation,
       createdAt: reservation.createdAt.toISOString(),
       startDate: reservation.startDate.toISOString(),

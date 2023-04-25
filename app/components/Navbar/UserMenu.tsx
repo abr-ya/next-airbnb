@@ -44,11 +44,11 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
     <>
       <MenuItem label="Home Page" onClick={() => router.push("/")} />
       <hr />
-      <MenuItem label="My trips" onClick={() => router.push("/trips")} />
       <MenuItem label="My favorites" onClick={() => router.push("/favorites")} />
-      <MenuItem label="My reservations" onClick={() => router.push("/reservations")} />
+      <MenuItem label="My trips" onClick={() => router.push("/trips")} />
+      <MenuItem label="Create new listing" onClick={createModal.onOpen} />
       <MenuItem label="My listings" onClick={() => router.push("/listings/my")} />
-      <MenuItem label="Airbnb your home" onClick={createModal.onOpen} />
+      <MenuItem label="My reservations" onClick={() => router.push("/reservations")} />
       <hr />
       <MenuItem label="Logout" onClick={() => signOut()} />
     </>
