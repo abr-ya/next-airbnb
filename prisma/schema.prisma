@@ -42,6 +42,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+type Pin {
+  lat Float
+  lon Float
+}
+
 model Listing {
   id             String @id @default(auto()) @map("_id") @db.ObjectId
   title String
@@ -57,6 +62,7 @@ model Listing {
   price Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
+  pin Pin?
 }
 
 model Reservation {

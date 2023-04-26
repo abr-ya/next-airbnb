@@ -116,6 +116,7 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
               guestCount={listing.guestCount}
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
+              pin={listing.pin}
             />
             <div className="order-first mb-10 md:order-last md:col-span-3">
               <ListingReservation

@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { IconType } from "react-icons";
 
 import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
@@ -9,6 +8,7 @@ import { SafeUser } from "@/app/types";
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
 import { FC } from "react";
+import { Pin } from "@prisma/client";
 
 const MapLeaflet = dynamic(() => import("../MapLeaflet"), {
   ssr: false,
@@ -22,6 +22,7 @@ interface IListingInfo {
   bathroomCount: number;
   category: { label: string; description: string } | undefined;
   locationValue: string;
+  pin: Pin | null;
 }
 
 const ListingInfo: FC<IListingInfo> = ({
@@ -32,10 +33,11 @@ const ListingInfo: FC<IListingInfo> = ({
   bathroomCount,
   category,
   locationValue,
+  pin,
 }) => {
   const { getByValue } = useCountries();
 
-  const coordinates = getByValue(locationValue)?.latlng;
+  const coordinates = pin ? [pin.lat, pin.lon] : getByValue(locationValue)?.latlng;
 
   return (
     <div className="col-span-4 flex flex-col gap-8">
@@ -55,7 +57,7 @@ const ListingInfo: FC<IListingInfo> = ({
       <hr />
       <div className="text-lg font-light text-neutral-500">{description}</div>
       <hr />
-      <MapLeaflet center={coordinates} />
+      <MapLeaflet center={coordinates} zoom={pin ? 15 : 4} />
     </div>
   );
 };

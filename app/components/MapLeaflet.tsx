@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { LEAFLET } from "../constants";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -20,20 +21,24 @@ L.Icon.Default.mergeOptions({
 
 interface IMapLeaflet {
   center?: number[];
+  zoom?: number;
 }
 
-const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const MapLeaflet: FC<IMapLeaflet> = ({ center, zoom }) => {
+  const getZoom = () => {
+    if (zoom) return zoom;
 
-const MapLeaflet: FC<IMapLeaflet> = ({ center }) => {
+    return center ? 4 : 3;
+  };
+
   return (
     <MapContainer
       center={(center as L.LatLngExpression) || [51, -0.09]}
-      zoom={center ? 4 : 3}
+      zoom={getZoom()}
       scrollWheelZoom={false}
       className="h-[35vh] rounded-lg"
     >
-      <TileLayer url={url} attribution={attribution} />
+      <TileLayer url={LEAFLET.url} attribution={LEAFLET.attribution} />
       {center && <Marker position={center as L.LatLngExpression} />}
     </MapContainer>
   );

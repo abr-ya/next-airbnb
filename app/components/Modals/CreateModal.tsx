@@ -47,6 +47,8 @@ const CreateModal = () => {
     price: 1,
     title: "",
     description: "",
+    lat: 50.09,
+    lon: 14.41,
   };
 
   const {
@@ -64,6 +66,8 @@ const CreateModal = () => {
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
+  // const lat = watch("lat");
+  // const lon = watch("lon");
 
   const setCustomValue = (id: string, value: any) => {
     console.log("setValue", id, value);
@@ -104,6 +108,13 @@ const CreateModal = () => {
     if (step !== STEPS.PRICE) {
       return onNext();
     }
+
+    data.pin = {
+      lat: data.lat,
+      lon: data.lon,
+    };
+    delete data.lat;
+    delete data.lon;
 
     console.log("post", data);
 
