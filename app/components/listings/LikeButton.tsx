@@ -3,7 +3,7 @@
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { SafeUser } from "@/app/types";
 import { FC } from "react";
-import useFavorite from "@/app/hooks/useFavorite";
+import useLike from "@/app/hooks/useLike";
 
 interface ILikeButton {
   listingId: string;
@@ -11,12 +11,12 @@ interface ILikeButton {
 }
 
 const LikeButton: FC<ILikeButton> = (props) => {
-  const { hasFavorited, toggleFavorite } = useFavorite(props);
+  const { hasLiked, toggleLike } = useLike(props);
 
   return (
-    <div onClick={toggleFavorite} className="relative hover:opacity-80 transition cursor-pointer">
+    <div onClick={toggleLike} className="relative hover:opacity-80 transition cursor-pointer">
       <AiOutlineHeart size={28} className="fill-white absolute -top-[2px] -right-[2px]" />
-      <AiFillHeart size={24} className={hasFavorited ? "fill-rose-500" : "fill-neutral-500/70"} />
+      <AiFillHeart size={24} className={hasLiked ? "fill-rose-500" : "fill-neutral-500/70"} />
     </div>
   );
 };
