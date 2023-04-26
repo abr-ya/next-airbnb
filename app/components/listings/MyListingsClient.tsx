@@ -1,15 +1,13 @@
 "use client";
 
 import { FC, useCallback, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-import Heading from "@/app/components/Heading";
-import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 import { SafeListing, SafeUser } from "@/app/types";
-import { toast } from "react-toastify";
-import { gridClasses } from "@/app/constants";
+import ListingsList from "./ListingsList";
 
 interface IMyListingsClient {
   listings: SafeListing[];
@@ -42,22 +40,19 @@ const MyListingsClient: FC<IMyListingsClient> = ({ listings, user }) => {
   );
 
   return (
-    <Container>
-      <Heading title="My Listings" subtitle="Delete... Edit == coming soon!" />
-      <div className={`${gridClasses} mt-10`}>
-        {listings.map((listing) => (
-          <ListingCard
-            key={listing.id}
-            data={listing}
-            actionId={listing.id}
-            onAction={onDelete}
-            disabled={deletingId === listing.id}
-            actionLabel="Delete listing"
-            currentUser={user}
-          />
-        ))}
-      </div>
-    </Container>
+    <ListingsList title="My Listings" subtitle="Edit => coming soon!">
+      {listings.map((listing) => (
+        <ListingCard
+          key={listing.id}
+          data={listing}
+          actionId={listing.id}
+          onAction={onDelete}
+          disabled={deletingId === listing.id}
+          actionLabel="Delete listing"
+          currentUser={user}
+        />
+      ))}
+    </ListingsList>
   );
 };
 

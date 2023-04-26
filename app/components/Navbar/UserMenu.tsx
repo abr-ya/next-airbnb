@@ -44,7 +44,7 @@ const UserMenu: FC<IUserMenu> = ({ currentUser }) => {
     <>
       <MenuItem label="Home Page" onClick={() => router.push("/")} />
       <hr />
-      <MenuItem label="My favorites" onClick={() => router.push("/favorites")} />
+      <MenuItem label="My favorites" onClick={() => router.push("/listings/favorites")} />
       <MenuItem label="My trips" onClick={() => router.push("/trips")} />
       <MenuItem label="Create new listing" onClick={createModal.onOpen} />
       <MenuItem label="My listings" onClick={() => router.push("/listings/my")} />
