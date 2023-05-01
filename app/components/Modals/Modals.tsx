@@ -2,6 +2,7 @@ import RegisterModal from "./RegisterModal";
 import LoginModal from "./LoginModal";
 import CreateModal from "./CreateModal";
 import SearchModal from "./SearchModal";
+import EditPinModal from "./EditPinModal";
 
 const Modals = () => {
   return (
@@ -10,6 +11,7 @@ const Modals = () => {
       <RegisterModal />
       <CreateModal />
       <SearchModal />
+      <EditPinModal />
     </>
   );
 };

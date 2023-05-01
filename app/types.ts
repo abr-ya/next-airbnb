@@ -26,3 +26,8 @@ export interface SearchParams {
   startDate?: string;
   endDate?: string;
 }
+
+export interface ICoord {
+  lat: number;
+  lng: number;
+}

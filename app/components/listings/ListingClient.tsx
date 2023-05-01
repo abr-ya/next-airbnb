@@ -32,6 +32,8 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
   const [totalPrice, setTotalPrice] = useState(listing.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
 
+  const isHost = listing.userId === currentUser?.id;
+
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
@@ -109,6 +111,7 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
           />
           <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6">
             <ListingInfo
+              id={listing.id}
               user={listing.user}
               category={category}
               description={listing.description}
@@ -117,6 +120,7 @@ const ListingClient: FC<IListingClient> = ({ listing, reservations = [], current
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
               pin={listing.pin}
+              isHost={isHost}
             />
             <div className="order-first mb-10 md:order-last md:col-span-3">
               <ListingReservation
