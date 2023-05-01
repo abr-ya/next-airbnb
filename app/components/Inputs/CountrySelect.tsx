@@ -3,6 +3,7 @@
 import { FC } from "react";
 import Select from "react-select";
 import useCountries from "@/app/hooks/useCountries";
+import ErrorMessage from "./ErrorMessage";
 
 export type CountrySelectValue = {
   flag: string;
@@ -15,19 +16,18 @@ export type CountrySelectValue = {
 interface ICountrySelect {
   value?: CountrySelectValue;
   onChange: (value: CountrySelectValue) => void;
+  isError?: boolean;
 }
 
-const CountrySelect: FC<ICountrySelect> = ({ value, onChange }) => {
+const CountrySelect: FC<ICountrySelect> = ({ value, onChange, isError }) => {
   const { getAll } = useCountries();
 
   const optionRender = (country: CountrySelectValue) => (
-    <div
-      className="
-    flex flex-row items-center gap-3"
-    >
+    <div className="flex flex-row items-center gap-3">
       <div>{country.flag}</div>
       <div>
-        {country.label},<span className="text-neutral-500 ml-1">{country.region}</span>
+        {country.label}
+        <span className="text-neutral-500 ml-1">{country.region}</span>
       </div>
     </div>
   );
@@ -56,6 +56,7 @@ const CountrySelect: FC<ICountrySelect> = ({ value, onChange }) => {
           },
         })}
       />
+      {isError && <ErrorMessage text="Please, select a country!" />}
     </div>
   );
 };

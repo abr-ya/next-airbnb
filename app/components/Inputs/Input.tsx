@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 import { BiDollar } from "react-icons/bi";
+import ErrorMessage from "./ErrorMessage";
 
 interface InputProps {
   id: string;
@@ -17,7 +18,7 @@ interface InputProps {
 
 const Input: FC<InputProps> = ({ id, label, type = "text", disabled, formatPrice, register, required, errors }) => (
   <div className="w-full relative">
-    {formatPrice && <BiDollar size={24} className="text-neutral-700 absolute top-5  left-2" />}
+    {formatPrice && <BiDollar size={24} className="text-neutral-700 absolute top-5 left-2" />}
     <input
       id={id}
       disabled={disabled}
@@ -43,6 +44,7 @@ const Input: FC<InputProps> = ({ id, label, type = "text", disabled, formatPrice
     >
       {label}
     </label>
+    {errors[id] && <ErrorMessage />}
   </div>
 );
 

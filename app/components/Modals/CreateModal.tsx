@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -52,6 +52,7 @@ const CreateModal = () => {
   };
 
   const {
+    control,
     handleSubmit,
     reset,
     watch,
@@ -180,7 +181,18 @@ const CreateModal = () => {
       bodyContent = (
         <div className="flex flex-col gap-8">
           <Heading title="Where is your place located?" subtitle={`step ${step + 1}: Help guests find you!`} />
-          <CountrySelect value={location} onChange={(value) => setCustomValue("location", value)} />
+          <Controller
+            name="location"
+            control={control}
+            render={() => (
+              <CountrySelect
+                value={location}
+                onChange={(value) => setCustomValue("location", value)}
+                isError={!!errors?.location}
+              />
+            )}
+            rules={{ required: true }}
+          />
           <DynamicMap center={location?.latlng} />
         </div>
       );
