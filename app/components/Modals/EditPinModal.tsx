@@ -35,7 +35,7 @@ const EditPinModal: FC = () => {
     axios
       .patch(`/api/listings/${editPinModal.id}`, data)
       .then(() => {
-        toast.success("Listing created!");
+        toast.success("Listing Pin updated!");
         router.refresh();
         editPinModal.onClose();
       })
@@ -50,18 +50,11 @@ const EditPinModal: FC = () => {
   const title = "Set Pin!";
   const subtitle = "Update coordinates your object...";
 
-  // todo: получать при открытии!
-  const init = {
-    latitude: 50.08,
-    longitude: 14.42,
-    zoom: 11,
-  };
-
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading title={title} subtitle={subtitle} />
       <div className="h-[400px]">
-        <MapBox initView={init} coordHandler={setCoord} />
+        <MapBox initView={editPinModal.init} coordHandler={setCoord} />
       </div>
     </div>
   );

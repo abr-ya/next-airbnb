@@ -7,13 +7,9 @@ import { SafeUser } from "@/app/types";
 
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Pin } from "@prisma/client";
 import useEditPinModal from "@/app/hooks/useEditPinModal";
-
-const MapLeaflet = dynamic(() => import("../MapLeaflet"), {
-  ssr: false,
-});
 
 interface IListingInfo {
   id: string;
@@ -44,6 +40,20 @@ const ListingInfo: FC<IListingInfo> = ({
   const editPinModal = useEditPinModal();
 
   const coordinates = pin ? [pin.lat, pin.lon] : getByValue(locationValue)?.latlng;
+  const init = {
+    latitude: coordinates ? coordinates[0] : 0,
+    longitude: coordinates ? coordinates[1] : 0,
+    zoom: 11,
+  };
+
+  const DynamicMap = useMemo(
+    () =>
+      dynamic(() => import("../MapLeaflet"), {
+        ssr: false,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pin],
+  );
 
   return (
     <div className="col-span-4 flex flex-col gap-8">
@@ -63,8 +73,8 @@ const ListingInfo: FC<IListingInfo> = ({
       <hr />
       <div className="text-lg font-light text-neutral-500">{description}</div>
       <hr />
-      <MapLeaflet center={coordinates} zoom={pin ? 15 : 4} />
-      {isHost && <div onClick={() => editPinModal.onOpen(id)}>Edit Pin</div>}
+      <DynamicMap center={coordinates} zoom={pin ? 15 : 4} />
+      {isHost && <div onClick={() => editPinModal.onOpen(id, init)}>Edit Pin</div>}
     </div>
   );
 };

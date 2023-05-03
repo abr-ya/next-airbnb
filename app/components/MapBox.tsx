@@ -21,7 +21,10 @@ interface IMapBox {
 
 const MapBox: FC<IMapBox> = ({ initView, coordHandler }) => {
   const [viewState, setViewState] = useState(initView);
-  const [marker, setMarker] = useState<{ lat: number; lng: number } | null>(null);
+  const [marker, setMarker] = useState<{ lat: number; lng: number } | null>({
+    lat: initView.latitude,
+    lng: initView.longitude,
+  });
 
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
